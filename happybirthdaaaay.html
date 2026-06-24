@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Israe 🌹</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg-deep: #0d0a0f;
+    --bg-mid: #1a1220;
+    --rose: #c4717a;
+    --rose-light: #e8a4aa;
+    --gold: #c9a96e;
+    --cream: #f0e6d3;
+    --muted: #8a7a8d;
+    --card-bg: rgba(255,255,255,0.04);
+    --card-border: rgba(196,113,122,0.2);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg-deep);
+    color: var(--cream);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ── STARS ── */
+  .stars-canvas {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── MUSIC ── */
+  #music-btn {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 100;
+    background: rgba(196,113,122,0.15);
+    border: 1px solid var(--card-border);
+    color: var(--rose-light);
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+  }
+  #music-btn:hover { background: rgba(196,113,122,0.3); transform: scale(1.05); }
+
+  /* ── SECTIONS ── */
+  .section {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 24px;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.9s ease, transform 0.9s ease;
+  }
+  .section.visible { opacity: 1; transform: translateY(0); }
+
+  /* ── EYEBROW ── */
+  .eyebrow {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 300;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+    opacity: 0.85;
+  }
+
+  /* ── SECTION 1: COUNTDOWN ── */
+  #s-countdown {
+    background: radial-gradient(ellipse at 50% 60%, #2a1a2e 0%, var(--bg-deep) 70%);
+  }
+
+  .countdown-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.8rem, 7vw, 5.5rem);
+    font-style: italic;
+    font-weight: 400;
+    color: var(--cream);
+    text-align: center;
+    line-height: 1.15;
+    margin-bottom: 10px;
+  }
+
+  .countdown-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.1rem;
+    color: var(--muted);
+    text-align: center;
+    margin-bottom: 52px;
+  }
+
+  .countdown-grid {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .cd-block {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 20px 28px;
+    text-align: center;
+    backdrop-filter: blur(8px);
+    min-width: 90px;
+  }
+
+  .cd-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    font-weight: 600;
+    color: var(--cream);
+    line-height: 1;
+    display: block;
+  }
+
+  .cd-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 8px;
+    display: block;
+  }
+
+  .cd-sep {
+    font-size: 2rem;
+    color: var(--rose);
+    opacity: 0.5;
+    margin-bottom: 20px;
+  }
+
+  .countdown-footer {
+    margin-top: 44px;
+    font-style: italic;
+    color: var(--muted);
+    font-size: 0.95rem;
+    text-align: center;
+  }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: var(--muted);
+    font-size: 0.8rem;
+    font-family: 'Inter', sans-serif;
+    letter-spacing: 0.15em;
+    animation: bounce 2s infinite;
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(-8px); }
+  }
+
+  /* ── SECTION 2: GIFT ── */
+  #s-gift {
+    background: radial-gradient(ellipse at 50% 40%, #1e1228 0%, var(--bg-deep) 70%);
+  }
+
+  .gift-box {
+    cursor: pointer;
+    font-size: 5rem;
+    filter: drop-shadow(0 0 30px rgba(196,113,122,0.5));
+    animation: glow-pulse 2.5s ease-in-out infinite;
+    transition: transform 0.3s ease;
+    margin: 20px 0;
+  }
+  .gift-box:hover { transform: scale(1.12) rotate(5deg); }
+
+  @keyframes glow-pulse {
+    0%, 100% { filter: drop-shadow(0 0 20px rgba(196,113,122,0.4)); }
+    50% { filter: drop-shadow(0 0 45px rgba(196,113,122,0.8)); }
+  }
+
+  .gift-hint {
+    font-style: italic;
+    color: var(--muted);
+    font-size: 1rem;
+    margin-top: 16px;
+  }
+
+  /* ── SECTION 3: HERO ── */
+  #s-hero {
+    background: radial-gradient(ellipse at 30% 50%, #241830 0%, var(--bg-deep) 65%);
+    text-align: center;
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 9vw, 7rem);
+    font-weight: 700;
+    line-height: 1.05;
+    color: var(--cream);
+    margin-bottom: 16px;
+  }
+
+  .hero-title span {
+    display: block;
+    font-style: italic;
+    font-weight: 400;
+    color: var(--rose-light);
+  }
+
+  .hero-sub {
+    font-style: italic;
+    color: var(--muted);
+    margin-bottom: 44px;
+    font-size: 1.05rem;
+  }
+
+  .btn-primary {
+    display: inline-block;
+    padding: 14px 36px;
+    border: 1px solid var(--rose);
+    color: var(--rose-light);
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    cursor: pointer;
+    background: transparent;
+    border-radius: 30px;
+    transition: all 0.35s ease;
+    backdrop-filter: blur(6px);
+  }
+  .btn-primary:hover {
+    background: rgba(196,113,122,0.18);
+    border-color: var(--rose-light);
+    transform: translateY(-2px);
+  }
+
+  /* floating hearts */
+  .heart-float {
+    position: absolute;
+    font-size: 1.2rem;
+    animation: float-up 6s ease-in-out infinite;
+    opacity: 0.15;
+    pointer-events: none;
+  }
+  @keyframes float-up {
+    0% { transform: translateY(0) rotate(0deg); opacity: 0.1; }
+    50% { opacity: 0.25; }
+    100% { transform: translateY(-80px) rotate(15deg); opacity: 0; }
+  }
+
+  /* ── SECTION 4: REASONS ── */
+  #s-reasons {
+    background: radial-gradient(ellipse at 70% 50%, #1c1428 0%, var(--bg-deep) 65%);
+  }
+
+  .reasons-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-style: italic;
+    text-align: center;
+    margin-bottom: 52px;
+    color: var(--cream);
+  }
+
+  .reasons-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    max-width: 860px;
+    width: 100%;
+  }
+
+  .reason-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 28px 28px 24px;
+    backdrop-filter: blur(10px);
+    transition: transform 0.35s ease, border-color 0.35s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .reason-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at top left, rgba(196,113,122,0.06) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .reason-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(196,113,122,0.45);
+  }
+
+  .reason-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.8rem;
+    font-style: italic;
+    color: rgba(196,113,122,0.2);
+    line-height: 1;
+    margin-bottom: 10px;
+  }
+
+  .reason-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.05rem;
+    color: var(--cream);
+    line-height: 1.65;
+  }
+
+  .reason-icon {
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  /* ── SECTION 5: LETTER ── */
+  #s-letter {
+    background: radial-gradient(ellipse at 50% 30%, #22162e 0%, var(--bg-deep) 70%);
+  }
+
+  .letter-wrap {
+    max-width: 640px;
+    width: 100%;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 20px;
+    padding: 52px 48px;
+    backdrop-filter: blur(12px);
+    position: relative;
+  }
+
+  .letter-wrap::before {
+    content: '❝';
+    position: absolute;
+    top: 20px;
+    left: 28px;
+    font-size: 4rem;
+    color: rgba(196,113,122,0.12);
+    font-family: 'Playfair Display', serif;
+    line-height: 1;
+  }
+
+  .letter-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-style: italic;
+    text-align: center;
+    margin-bottom: 32px;
+    color: var(--cream);
+  }
+
+  .letter-body {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    line-height: 1.9;
+    color: rgba(240,230,211,0.88);
+  }
+
+  .letter-body p { margin-bottom: 20px; }
+  .letter-body p:last-child { margin-bottom: 0; }
+
+  .letter-sig {
+    margin-top: 36px;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1.2rem;
+    color: var(--rose-light);
+    text-align: right;
+  }
+
+  /* ── SECTION 6: WISHES ── */
+  #s-wishes {
+    background: radial-gradient(ellipse at 40% 60%, #1e1530 0%, var(--bg-deep) 65%);
+  }
+
+  .wishes-wrap {
+    max-width: 600px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .wishes-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-style: italic;
+    margin-bottom: 32px;
+    color: var(--cream);
+  }
+
+  .wishes-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 20px;
+    padding: 44px 40px;
+    backdrop-filter: blur(12px);
+    font-size: 1.05rem;
+    line-height: 1.85;
+    color: rgba(240,230,211,0.85);
+    margin-bottom: 36px;
+  }
+
+  .heart-divider {
+    color: var(--rose);
+    font-size: 1.5rem;
+    margin: 24px 0;
+    display: block;
+    animation: heartbeat 1.5s ease-in-out infinite;
+  }
+  @keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+  }
+
+  /* ── SECTION 7: FINAL ── */
+  #s-final {
+    background: radial-gradient(ellipse at 50% 50%, #2a1535 0%, var(--bg-deep) 65%);
+    text-align: center;
+  }
+
+  .final-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.5rem, 8vw, 6rem);
+    font-weight: 700;
+    color: var(--cream);
+    line-height: 1.1;
+    margin-bottom: 24px;
+  }
+
+  .final-title .italic {
+    display: block;
+    font-style: italic;
+    font-weight: 400;
+    color: var(--rose-light);
+    font-size: 0.6em;
+    margin-bottom: 8px;
+  }
+
+  .final-sub {
+    font-style: italic;
+    color: var(--muted);
+    margin-bottom: 10px;
+    font-size: 1rem;
+    line-height: 1.8;
+  }
+
+  .final-sig {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1.3rem;
+    color: var(--rose-light);
+    margin: 28px 0 44px;
+  }
+
+  .btn-replay {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 13px 32px;
+    border: 1px solid rgba(138,122,141,0.35);
+    color: var(--muted);
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    cursor: pointer;
+    background: transparent;
+    border-radius: 30px;
+    transition: all 0.3s ease;
+  }
+  .btn-replay:hover {
+    border-color: var(--rose);
+    color: var(--rose-light);
+  }
+
+  /* ── PAGE TRANSITIONS ── */
+  .page {
+    display: none;
+    animation: fadeIn 0.7s ease forwards;
+  }
+  .page.active { display: block; }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* ── CONFETTI ── */
+  .confetti-piece {
+    position: fixed;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 999;
+    animation: confetti-fall linear forwards;
+  }
+  @keyframes confetti-fall {
+    0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    .letter-wrap { padding: 36px 24px; }
+    .wishes-card { padding: 32px 24px; }
+    .cd-block { padding: 16px 18px; min-width: 70px; }
+    .cd-number { font-size: 2.2rem; }
+    .reasons-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<canvas class="stars-canvas" id="stars"></canvas>
+
+<button id="music-btn" title="Toggle music">🎵</button>
+
+<audio id="bg-music" loop>
+  <source src="https://cdn.pixabay.com/download/audio/2022/10/30/audio_0625cbf191.mp3" type="audio/mpeg">
+</audio>
+
+<!-- ══════════════════════════════════════════════
+     SECTION 1 — COUNTDOWN
+═══════════════════════════════════════════════ -->
+<section class="section" id="s-countdown">
+  <p class="eyebrow">✦ counting down ✦</p>
+  <h1 class="countdown-title">Her Special Day<br><em style="font-size:0.65em; color:var(--rose-light);">is Almost Here</em></h1>
+  <p class="countdown-sub">Something beautiful is waiting for you, Israe 🤍</p>
+
+  <div class="countdown-grid">
+    <div class="cd-block">
+      <span class="cd-number" id="cd-days">00</span>
+      <span class="cd-label">Days</span>
+    </div>
+    <span class="cd-sep">:</span>
+    <div class="cd-block">
+      <span class="cd-number" id="cd-hours">00</span>
+      <span class="cd-label">Hours</span>
+    </div>
+    <span class="cd-sep">:</span>
+    <div class="cd-block">
+      <span class="cd-number" id="cd-mins">00</span>
+      <span class="cd-label">Minutes</span>
+    </div>
+    <span class="cd-sep">:</span>
+    <div class="cd-block">
+      <span class="cd-number" id="cd-secs">00</span>
+      <span class="cd-label">Seconds</span>
+    </div>
+  </div>
+
+  <p class="countdown-footer" id="cd-footer">Until July 13th — your birthday 🌹</p>
+
+  <div class="scroll-hint">
+    <span>↓</span>
+    <span style="font-family:'Inter',sans-serif; font-size:10px; letter-spacing:0.2em;">scroll</span>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     SECTION 2 — GIFT
+═══════════════════════════════════════════════ -->
+<section class="section" id="s-gift">
+  <p class="eyebrow">✦ something for you ✦</p>
+  <h2 style="font-family:'Playfair Display',serif; font-size:clamp(1.8rem,5vw,3rem); font-style:italic; text-align:center; margin-bottom:8px;">
+    I made something<br>just for you
+  </h2>
+  <p style="color:var(--muted); font-style:italic; text-align:center; margin-bottom:40px;">Click the gift to open it, Israe 🎁</p>
+
+  <div class="gift-box" id="gift-click" role="button" tabindex="0" aria-label="Open your gift">🎁</div>
+  <p class="gift-hint">tap to unwrap ✨</p>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     SECTION 3 — HERO
+═══════════════════════════════════════════════ -->
+<section class="section" id="s-hero">
+  <!-- floating hearts -->
+  <div class="heart-float" style="left:10%; top:20%; animation-delay:0s;">💕</div>
+  <div class="heart-float" style="left:80%; top:30%; animation-delay:1.5s;">🌸</div>
+  <div class="heart-float" style="left:15%; top:70%; animation-delay:3s;">✨</div>
+  <div class="heart-float" style="left:85%; top:65%; animation-delay:2s;">💗</div>
+
+  <p class="eyebrow">✦ a love letter ✦</p>
+  <h1 class="hero-title">
+    Your
+    <span>Special Day</span>
+  </h1>
+  <p class="hero-sub">Made with love, just for you — from Nabil 🌹</p>
+  <button class="btn-primary" onclick="scrollToSection('s-reasons')">✦ Keep Reading ✦</button>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     SECTION 4 — REASONS
+═══════════════════════════════════════════════ -->
+<section class="section" id="s-reasons">
+  <p class="eyebrow">✦ from the heart ✦</p>
+  <h2 class="reasons-title">Why I love you,<br>Israe</h2>
+
+  <div class="reasons-grid">
+    <div class="reason-card">
+      <span class="reason-icon">🌙</span>
+      <div class="reason-number">01</div>
+      <p class="reason-text">Because even from miles away, your presence fills every quiet moment I have. You are the thought that comes before sleep and the first feeling I wake up to.</p>
+    </div>
+    <div class="reason-card">
+      <span class="reason-icon">💬</span>
+      <div class="reason-number">02</div>
+      <p class="reason-text">Because the way you talk — the way you express things — makes me feel understood in a way I never felt before. You speak and my whole world makes more sense.</p>
+    </div>
+    <div class="reason-card">
+      <span class="reason-icon">🌹</span>
+      <div class="reason-number">03</div>
+      <p class="reason-text">Because you chose me, despite the distance. That choice — made every single day — is the most beautiful thing anyone has ever done for me.</p>
+    </div>
+    <div class="reason-card">
+      <span class="reason-icon">✨</span>
+      <div class="reason-number">04</div>
+      <p class="reason-text">Because you make the ordinary feel special. A simple message from you turns a regular afternoon into something I want to remember forever.</p>
+    </div>
+    <div class="reason-card">
+      <span class="reason-icon">🕊️</span>
+      <div class="reason-number">05</div>
+      <p class="reason-text">Because you are patient and kind and real. In a world full of noise, you are my calm — and I never take that lightly.</p>
+    </div>
+    <div class="reason-card">
+      <span class="reason-icon">🌍</span>
+      <div class="reason-number">06</div>
+      <p class="reason-text">Because the kilometers between us have never once made me doubt us. If anything, they've shown me how strong something real can be — and what we have is very real.</p>
+    </div>
+    <div class="reason-card">
+      <span class="reason-icon">💫</span>
+      <div class="reason-number">07</div>
+      <p class="reason-text">Because your laugh — even through a screen — is the most genuine sound in my world. I would travel any distance just to be the reason behind it.</p>
+    </div>
+    <div class="reason-card">
+      <span class="reason-icon">❤️</span>
+      <div class="reason-number">08</div>
+      <p class="reason-text">Because loving you has made me a better version of myself. You didn't just enter my life — you quietly improved everything you touched in it.</p>
+    </div>
+  </div>
+
+  <div style="margin-top: 52px;">
+    <button class="btn-primary" onclick="scrollToSection('s-letter')">✦ Read My Letter ✦</button>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     SECTION 5 — LETTER
+═══════════════════════════════════════════════ -->
+<section class="section" id="s-letter">
+  <p class="eyebrow">✦ written just for you ✦</p>
+
+  <div class="letter-wrap">
+    <h2 class="letter-title">Happy Birthday, Israe</h2>
+
+    <div class="letter-body">
+      <p>
+        I've been thinking about what to say to you for a long time. I've started and deleted so many words because nothing felt enough. But here I am, trying again — because you deserve the attempt, even if the words fall short.
+      </p>
+      <p>
+        Today, you turn another year older — and I want you to know that every single year of your existence has made this world more beautiful. Not in a way anyone can easily measure, but in the quiet way that really matters: the kind that changes the people around you just by being near them.
+      </p>
+      <p>
+        Being with you from a distance has taught me something I didn't expect — that love isn't about proximity. It's about choosing someone every day. And I choose you, Israe. Every morning, every night, every moment in between. Distance has never once made me doubt that.
+      </p>
+      <p>
+        On your birthday, all I want is for you to feel how seen you are. How loved you are. Not just by me — but genuinely, deeply loved. You deserve every good thing this life has to offer, and I hope this year brings them to your door.
+      </p>
+      <p>
+        I am so grateful you exist. I am so grateful you are mine.
+      </p>
+    </div>
+
+    <div class="letter-sig">
+      Forever yours, Nabil 🌹
+    </div>
+  </div>
+
+  <div style="margin-top: 44px;">
+    <button class="btn-primary" onclick="scrollToSection('s-wishes')">✦ One More Thing ✦</button>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     SECTION 6 — WISHES
+═══════════════════════════════════════════════ -->
+<section class="section" id="s-wishes">
+  <p class="eyebrow">✦ birthday wishes ✦</p>
+
+  <div class="wishes-wrap">
+    <h2 class="wishes-title">My Wishes for You</h2>
+    <p style="font-style:italic; color:var(--muted); margin-bottom:32px;">Happy Birthday, my love 💕</p>
+
+    <div class="wishes-card">
+      <p>
+        I wish you happiness so full it overflows. I wish you mornings that greet you gently, and nights that let you rest in peace. I wish you dreams that excite you and days that don't feel wasted.
+      </p>
+      <span class="heart-divider">♡</span>
+      <p>
+        I wish you health and strength, always. I wish you laughter — the kind that makes your whole body shake. I wish you moments where everything feels right, where the world is exactly where it should be.
+      </p>
+      <span class="heart-divider">♡</span>
+      <p>
+        And most of all — I wish you love. Real, honest, patient love. The kind you give so freely and deserve to receive in return. You are one of a kind, Israe. Never forget that.
+      </p>
+    </div>
+
+    <button class="btn-primary" onclick="scrollToSection('s-final')">✦ Almost There ✦</button>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     SECTION 7 — FINAL
+═══════════════════════════════════════════════ -->
+<section class="section" id="s-final">
+  <p class="eyebrow">✦ always & forever ✦</p>
+
+  <h1 class="final-title">
+    <span class="italic">with all my love,</span>
+    Happy Birthday<br>Israe 🌹
+  </h1>
+
+  <p class="final-sub">
+    Thank you for being part of my life.<br>
+    I hope this little gift makes your special day<br>even more beautiful.
+  </p>
+
+  <p class="final-sig">Forever yours. 💕</p>
+
+  <button class="btn-replay" onclick="replayFromStart()">↺ Replay From Start</button>
+</section>
+
+<script>
+// ── STARS ──────────────────────────────────────
+const canvas = document.getElementById('stars');
+const ctx = canvas.getContext('2d');
+let stars = [];
+
+function initStars() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  stars = Array.from({ length: 180 }, () => ({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    r: Math.random() * 1.5 + 0.3,
+    alpha: Math.random(),
+    speed: Math.random() * 0.008 + 0.003,
+    phase: Math.random() * Math.PI * 2
+  }));
+}
+
+function drawStars() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  const t = Date.now() / 1000;
+  stars.forEach(s => {
+    const a = 0.3 + 0.5 * Math.abs(Math.sin(t * s.speed * 10 + s.phase));
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(240,230,211,${a})`;
+    ctx.fill();
+  });
+  requestAnimationFrame(drawStars);
+}
+
+initStars();
+drawStars();
+window.addEventListener('resize', initStars);
+
+// ── COUNTDOWN ──────────────────────────────────
+function updateCountdown() {
+  const now = new Date();
+  const target = new Date(now.getFullYear(), 6, 13); // July 13
+  if (now > target) target.setFullYear(target.getFullYear() + 1);
+  const diff = target - now;
+
+  if (diff <= 0) {
+    document.getElementById('cd-days').textContent = '00';
+    document.getElementById('cd-hours').textContent = '00';
+    document.getElementById('cd-mins').textContent = '00';
+    document.getElementById('cd-secs').textContent = '00';
+    document.getElementById('cd-footer').textContent = '🎉 Today is the day! Happy Birthday Israe! 🌹';
+    return;
+  }
+
+  const d = Math.floor(diff / 86400000);
+  const h = Math.floor((diff % 86400000) / 3600000);
+  const m = Math.floor((diff % 3600000) / 60000);
+  const s = Math.floor((diff % 60000) / 1000);
+
+  document.getElementById('cd-days').textContent = String(d).padStart(2, '0');
+  document.getElementById('cd-hours').textContent = String(h).padStart(2, '0');
+  document.getElementById('cd-mins').textContent = String(m).padStart(2, '0');
+  document.getElementById('cd-secs').textContent = String(s).padStart(2, '0');
+}
+
+updateCountdown();
+setInterval(updateCountdown, 1000);
+
+// ── SCROLL REVEAL ──────────────────────────────
+const sections = document.querySelectorAll('.section');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) e.target.classList.add('visible');
+  });
+}, { threshold: 0.15 });
+sections.forEach(s => observer.observe(s));
+
+// ── SCROLL TO SECTION ──────────────────────────
+function scrollToSection(id) {
+  document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+}
+
+// ── GIFT CLICK ─────────────────────────────────
+document.getElementById('gift-click').addEventListener('click', () => {
+  spawnConfetti();
+  setTimeout(() => scrollToSection('s-hero'), 600);
+});
+document.getElementById('gift-click').addEventListener('keydown', e => {
+  if (e.key === 'Enter' || e.key === ' ') {
+    spawnConfetti();
+    setTimeout(() => scrollToSection('s-hero'), 600);
+  }
+});
+
+// ── CONFETTI ───────────────────────────────────
+function spawnConfetti() {
+  const colors = ['#c4717a', '#e8a4aa', '#c9a96e', '#f0e6d3', '#9b7fa8'];
+  for (let i = 0; i < 60; i++) {
+    const el = document.createElement('div');
+    el.className = 'confetti-piece';
+    el.style.left = Math.random() * 100 + 'vw';
+    el.style.top = '-10px';
+    el.style.background = colors[Math.floor(Math.random() * colors.length)];
+    el.style.animationDuration = (Math.random() * 2 + 1.5) + 's';
+    el.style.animationDelay = Math.random() * 0.5 + 's';
+    el.style.width = el.style.height = (Math.random() * 8 + 4) + 'px';
+    el.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 4000);
+  }
+}
+
+// ── MUSIC ──────────────────────────────────────
+const audio = document.getElementById('bg-music');
+const musicBtn = document.getElementById('music-btn');
+let playing = false;
+
+// Try to load "Perfect" via YouTube embed workaround (use a royalty-free romantic alternative)
+// Since direct YouTube isn't embeddable as audio, use a Pixabay royalty-free romantic piano track
+audio.volume = 0.4;
+
+musicBtn.addEventListener('click', () => {
+  if (playing) {
+    audio.pause();
+    musicBtn.textContent = '🎵';
+    playing = false;
+  } else {
+    audio.play().catch(() => {});
+    musicBtn.textContent = '🔇';
+    playing = true;
+  }
+});
+
+// Auto-play attempt on first interaction
+document.addEventListener('click', () => {
+  if (!playing) {
+    audio.play().then(() => {
+      playing = true;
+      musicBtn.textContent = '🔇';
+    }).catch(() => {});
+  }
+}, { once: true });
+
+// ── REPLAY ─────────────────────────────────────
+function replayFromStart() {
+  spawnConfetti();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── REDUCED MOTION ─────────────────────────────
+if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  document.querySelectorAll('.heart-float').forEach(el => el.style.animation = 'none');
+}
+</script>
+</body>
+</html>
