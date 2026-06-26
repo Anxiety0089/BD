@@ -536,16 +536,106 @@
     .cd-number { font-size: 2.2rem; }
     .reasons-grid { grid-template-columns: 1fr; }
   }
+
+  /* ── LOCK SCREEN ── */
+  #lock-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 300;
+    background: radial-gradient(ellipse at 50% 40%, #2a1220 0%, #0d0a0f 75%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .lock-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(196,113,122,0.25);
+    border-radius: 28px;
+    padding: 44px 32px 36px;
+    width: 100%;
+    max-width: 340px;
+    text-align: center;
+    backdrop-filter: blur(16px);
+    box-shadow: 0 0 60px rgba(196,113,122,0.08);
+  }
+  .lock-rose { font-size: 2.8rem; margin-bottom: 18px; display: block; animation: glow-pulse 2.5s ease-in-out infinite; }
+  .lock-title { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.7rem; color: var(--cream); margin-bottom: 6px; }
+  .lock-subtitle { font-family: 'Inter', sans-serif; font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--muted); margin-bottom: 28px; }
+  .lock-dots { display: flex; justify-content: center; gap: 10px; margin-bottom: 28px; }
+  .lock-dot { width: 12px; height: 12px; border-radius: 50%; border: 1.5px solid rgba(196,113,122,0.4); background: transparent; transition: all 0.2s ease; }
+  .lock-dot.filled { background: var(--rose); border-color: var(--rose); box-shadow: 0 0 8px rgba(196,113,122,0.6); }
+  .lock-dot.error { background: #e05555; border-color: #e05555; animation: shake 0.4s ease; }
+  @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-5px)} 75%{transform:translateX(5px)} }
+  .lock-keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
+  .lock-key {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(196,113,122,0.15);
+    border-radius: 50%;
+    width: 64px; height: 64px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem; color: var(--cream);
+    cursor: pointer; margin: 0 auto;
+    transition: all 0.15s ease;
+    user-select: none; -webkit-tap-highlight-color: transparent;
+  }
+  .lock-key:hover, .lock-key:active { background: rgba(196,113,122,0.2); border-color: rgba(196,113,122,0.5); transform: scale(0.95); }
+  .lock-key.key-action { font-size: 0.9rem; color: var(--muted); }
+  .lock-message { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 0.95rem; color: var(--rose-light); min-height: 52px; display: flex; align-items: center; justify-content: center; padding: 0 8px; line-height: 1.6; }
+  .lock-hint { font-family: 'Inter', sans-serif; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(138,122,141,0.45); margin-top: 16px; }
+  @keyframes fadeOut { to { opacity: 0; pointer-events: none; } }
+  .lock-unlocking { animation: fadeOut 0.9s ease forwards; }
+
 </style>
 </head>
 <body>
+
+
+<!-- ══════════════════════════════════════════════
+     LOCK SCREEN
+═══════════════════════════════════════════════ -->
+<div id="lock-screen">
+  <div class="lock-card">
+    <span class="lock-rose">🌹</span>
+    <h2 class="lock-title">For You, My Love</h2>
+    <p class="lock-subtitle">Enter our secret code</p>
+
+    <div class="lock-dots">
+      <div class="lock-dot" id="dot-0"></div>
+      <div class="lock-dot" id="dot-1"></div>
+      <div class="lock-dot" id="dot-2"></div>
+      <div class="lock-dot" id="dot-3"></div>
+    </div>
+
+    <div class="lock-keypad">
+      <div class="lock-key" onclick="lockPress('1')">1</div>
+      <div class="lock-key" onclick="lockPress('2')">2</div>
+      <div class="lock-key" onclick="lockPress('3')">3</div>
+      <div class="lock-key" onclick="lockPress('4')">4</div>
+      <div class="lock-key" onclick="lockPress('5')">5</div>
+      <div class="lock-key" onclick="lockPress('6')">6</div>
+      <div class="lock-key" onclick="lockPress('7')">7</div>
+      <div class="lock-key" onclick="lockPress('8')">8</div>
+      <div class="lock-key" onclick="lockPress('9')">9</div>
+      <div class="lock-key key-action" onclick="lockClear()">✕</div>
+      <div class="lock-key" onclick="lockPress('0')">0</div>
+      <div class="lock-key key-action" onclick="lockDelete()">⌫</div>
+    </div>
+
+    <div class="lock-message" id="lock-message">✦ &nbsp; ✦ &nbsp; ✦</div>
+    <p class="lock-hint">Hint: our special date 💕</p>
+  </div>
+</div>
 
 <canvas class="stars-canvas" id="stars"></canvas>
 
 <button id="music-btn" title="Toggle music">🎵</button>
 
 <audio id="bg-music" loop>
-  <source src="music.mp3" type="audio/mpeg">
+  <source src="https://cdn.pixabay.com/audio/2023/06/08/audio_1b89f1a94a.mp3" type="audio/mpeg">
+  <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_8cb6a6d9b4.mp3" type="audio/mpeg">
 </audio>
 
 <!-- ══════════════════════════════════════════════
@@ -585,6 +675,8 @@
     <span style="font-family:'Inter',sans-serif; font-size:10px; letter-spacing:0.2em;">scroll</span>
   </div>
 </section>
+
+
 
 <!-- ══════════════════════════════════════════════
      SECTION 2 — GIFT
@@ -874,10 +966,20 @@ function spawnConfetti() {
 const audio = document.getElementById('bg-music');
 const musicBtn = document.getElementById('music-btn');
 let playing = false;
-
-// Try to load "Perfect" via YouTube embed workaround (use a royalty-free romantic alternative)
-// Since direct YouTube isn't embeddable as audio, use a Pixabay royalty-free romantic piano track
 audio.volume = 0.4;
+
+function startExperience() {
+  const overlay = document.getElementById('music-overlay');
+  overlay.style.transition = 'opacity 0.8s ease';
+  overlay.style.opacity = '0';
+  setTimeout(() => overlay.style.display = 'none', 800);
+  audio.play().then(() => {
+    playing = true;
+    musicBtn.textContent = '🔇';
+  }).catch(() => {
+    // Music blocked, still open the site
+  });
+}
 
 musicBtn.addEventListener('click', () => {
   if (playing) {
@@ -891,20 +993,91 @@ musicBtn.addEventListener('click', () => {
   }
 });
 
-// Auto-play attempt on first interaction
-document.addEventListener('click', () => {
-  if (!playing) {
-    audio.play().then(() => {
-      playing = true;
-      musicBtn.textContent = '🔇';
-    }).catch(() => {});
-  }
-}, { once: true });
-
 // ── REPLAY ─────────────────────────────────────
 function replayFromStart() {
   spawnConfetti();
   window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+
+// ── LOCK SCREEN ──────────────────────────────
+const CORRECT_CODE = '0912';
+const HINTS = [
+  "Nope… think about someone very handsome 😏",
+  "Kharraaayaaa 😂❄️… jarrbi chi 7aja 3ndha 3ala9a b winter.",
+  "Getting warmer…  had nhar special bzaaf 🥶",
+  "It's the birthday of the person who love you the most 🌹",
+  "Seriously?? It's My birthday!! 09/12 waaaaaaaaaaaaaaaaaaaaaa 😭😂"
+];
+let lockInput = '';
+let attempts = 0;
+
+function lockPress(digit) {
+  if (lockInput.length >= 4) return;
+  lockInput += digit;
+  updateDots();
+  if (lockInput.length === 4) {
+    setTimeout(checkCode, 200);
+  }
+}
+
+function lockDelete() {
+  lockInput = lockInput.slice(0, -1);
+  updateDots();
+}
+
+function lockClear() {
+  lockInput = '';
+  updateDots();
+  document.getElementById('lock-message').innerHTML = '✦ &nbsp; ✦ &nbsp; ✦';
+}
+
+function updateDots() {
+  for (let i = 0; i < 4; i++) {
+    const dot = document.getElementById('dot-' + i);
+    dot.classList.remove('filled', 'error');
+    if (i < lockInput.length) dot.classList.add('filled');
+  }
+}
+
+function checkCode() {
+  if (lockInput === CORRECT_CODE) {
+    // Correct!
+    for (let i = 0; i < 4; i++) {
+      const dot = document.getElementById('dot-' + i);
+      dot.classList.add('filled');
+    }
+    document.getElementById('lock-message').innerHTML = '🌹 Welcome, my love…';
+    spawnConfetti();
+    setTimeout(() => {
+      const ls = document.getElementById('lock-screen');
+      ls.classList.add('lock-unlocking');
+      setTimeout(() => {
+        ls.style.display = 'none';
+        // Start music
+        audio.play().then(() => {
+          playing = true;
+          musicBtn.textContent = '🔇';
+        }).catch(() => {});
+      }, 900);
+    }, 800);
+  } else {
+    // Wrong!
+    attempts++;
+    for (let i = 0; i < 4; i++) {
+      const dot = document.getElementById('dot-' + i);
+      dot.classList.remove('filled');
+      dot.classList.add('error');
+    }
+    const hintIndex = Math.min(attempts - 1, HINTS.length - 1);
+    document.getElementById('lock-message').textContent = HINTS[hintIndex];
+    setTimeout(() => {
+      for (let i = 0; i < 4; i++) {
+        document.getElementById('dot-' + i).classList.remove('error');
+      }
+      lockInput = '';
+    }, 1200);
+  }
 }
 
 // ── REDUCED MOTION ─────────────────────────────
